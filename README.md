@@ -3,8 +3,8 @@ Project Repo
 
 Members:
 PM - Makai Moody-Broen
-
 Designer - Tyler Reilly
+Developer - Matthew Tinkham
 
 Problem Statements:
 Many people are looking for a way to stay entertained and are unable to find anything good enough.
