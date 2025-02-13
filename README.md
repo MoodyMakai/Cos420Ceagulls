@@ -7,5 +7,7 @@ PM - Makai Moody-Broen    Designer - Tyler Reilly    Developer's - Matthew Tinkh
 
 
 Problem Statements:
-Many people are looking for a way to stay entertained and are unable to find anything good enough.
-People look for certain websites or apps that solve a certain problem and are unable to find a good solution.
+- [ ] Many people are looking for a way to stay entertained and are unable to find anything good enough.
+
+
+- [ ] People look for certain websites or apps that solve a certain problem and are unable to find a good solution.
