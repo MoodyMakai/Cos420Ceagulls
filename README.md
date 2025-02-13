@@ -3,7 +3,9 @@ Project Repo
 
 Members:
 PM - Makai Moody-Broen
+
 Designer - Tyler Reilly
+
 Developer's - Matthew Tinkham, Camron Lothrop, George Pitt
 
 Problem Statements:
