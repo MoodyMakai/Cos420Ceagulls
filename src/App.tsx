@@ -1,37 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import pres from "./assets/Viktor_Orban.2024_(cropped).jpg";
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      
-      <div>
-        <style>
-        </style> 
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount(1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+          <h1 className='col-12'> SUPER SNAKE</h1>
+          <div className='row'>
+
+          
+          <button className="col-3 btn btn-primary">Menu</button>
+          <div className="col-6"></div>
+          <button className="col-3 btn btn-secondary"> High Scores</button>
+          </div>
+    </div>
     </>
   )
 }
