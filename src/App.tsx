@@ -34,7 +34,7 @@ function App() {
       backgroundRepeat: 'no-repeat' // Optional
 
     }}>
-          <h1 className='row' style={{ display: 'flex', justifyContent: 'center' }}> SUPER SNAKE</h1>
+          <h1 className='row' style={{ display: 'flex', justifyContent: 'center', color: 'white'}}> SUPER SNAKE</h1>
           <div className='row'>
               <button className="col-3 btn btn-primary">Game Modes</button>
               <div className="col-6"></div>
