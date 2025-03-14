@@ -4,7 +4,7 @@ import '../src/assets/snake-image.jpg'
 
 
 function App() {
-  const toggleVisibility = (id) => {
+  const toggleVisibility = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       if (element.style.visibility === "hidden") {
