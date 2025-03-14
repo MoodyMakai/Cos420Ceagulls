@@ -110,7 +110,6 @@ function App() {
             </tbody>
           </table>
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
           <button className='btn btn-success'>Play</button>
         </div>
