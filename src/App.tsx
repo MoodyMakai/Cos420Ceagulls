@@ -1,39 +1,121 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import pres from "./assets/Viktor_Orban.2024_(cropped).jpg";
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../src/assets/snake-image.jpg'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const toggleVisibility = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      if (element.style.visibility === "hidden") {
+        element.style.visibility = "visible";
+        element.style.height = "auto";
+      } else {
+        element.style.visibility = "hidden";
+        element.style.height = "0";
+      }
+    }
+  };
 
   return (
     <>
-      
-      <div>
-        <style>
-        </style> 
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div style={{ 
+        margin: 0, 
+        padding: 0,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundImage: `url(${'../src/assets/snake-image.jpg'})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        <h1 className='row' style={{ display: 'flex', justifyContent: 'center', color: 'white' }}>SUPER SNAKE</h1>
+
+        <div className='row'>
+          <button className="col-3 btn btn-primary" onClick={() => toggleVisibility("gameModes")}>Game Modes</button>
+          <div className="col-6"></div>
+          <button className="col-3 btn btn-secondary" onClick={() => toggleVisibility("highScores")}>High Scores</button>
+        </div>
+
+        <div className='row'>
+          <div id="gameModes" className='col-3' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
+            <button className="col-12 btn btn-info">Free Play</button>
+            <button className="col-12 btn btn-info">Local Multiplayer</button>
+            <button className="col-12 btn btn-info">Timed Mode</button>
+          </div>
+          <div className='col-6'>
+            <h1 hidden>Do nothing here</h1>
+          </div>
+          <table id="highScores" className='col-3 table table-dark' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>User Name</th>
+                <th>High Score</th>
+              </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>AAA</td>
+                      <td>10000</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>BBB</td>
+                      <td>9000</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>CCC</td>
+                      <td>8000</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>DDD</td>
+                      <td>7000</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>EEE</td>
+                      <td>6000</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>FFF</td>
+                      <td>5000</td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>GGG</td>
+                      <td>4000</td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td>HHH</td>
+                      <td>3000</td>
+                    </tr>
+                    <tr>
+                      <td>9</td>
+                      <td>III</td>
+                      <td>2000</td>
+                    </tr>
+                    <tr>
+                      <td>10</td>
+                      <td>JJJ</td>
+                      <td>1000</td>
+                    </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
+          <button className='btn btn-success'>Play</button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount(1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
