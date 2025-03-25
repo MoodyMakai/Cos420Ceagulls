@@ -1,6 +1,7 @@
 import './App.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../src/assets/snake-image.jpg'
+import '../src/assets/super_snake_logo.png'
 
 
 function App() {
@@ -31,7 +32,9 @@ function App() {
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}>
-        <h1 className='row' style={{ display: 'flex', justifyContent: 'center', color: 'white' }}>SUPER SNAKE</h1>
+        <h1>
+          <img src = '../src/assets/super_snake_logo.png' alt = "SUPER SNAKE"></img>
+        </h1>        
 
         <div className='row'>
           <button className="col-3 btn btn-primary" onClick={() => toggleVisibility("gameModes")}>Game Modes</button>
