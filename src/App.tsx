@@ -1,5 +1,6 @@
 import './App.css'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 
@@ -51,67 +52,69 @@ function App() {
           <div className='col-6'>
             <h1 hidden>Do nothing here</h1>
           </div>
-          <table id="highScores" className='col-3 table table-dark' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>User Name</th>
-                <th>High Score</th>
-              </tr>
-            </thead>
-            <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>AAA</td>
-                      <td>10000</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>BBB</td>
-                      <td>9000</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>CCC</td>
-                      <td>8000</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>DDD</td>
-                      <td>7000</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>EEE</td>
-                      <td>6000</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>FFF</td>
-                      <td>5000</td>
-                    </tr>
-                    <tr>
-                      <td>7</td>
-                      <td>GGG</td>
-                      <td>4000</td>
-                    </tr>
-                    <tr>
-                      <td>8</td>
-                      <td>HHH</td>
-                      <td>3000</td>
-                    </tr>
-                    <tr>
-                      <td>9</td>
-                      <td>III</td>
-                      <td>2000</td>
-                    </tr>
-                    <tr>
-                      <td>10</td>
-                      <td>JJJ</td>
-                      <td>1000</td>
-                    </tr>
-            </tbody>
-          </table>
+          <div className='col-3'>
+            <table id="highScores" className='table table-dark' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>User Name</th>
+                  <th>High Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>AAA</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>BBB</td>
+                        <td>9000</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>CCC</td>
+                        <td>8000</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>DDD</td>
+                        <td>7000</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>EEE</td>
+                        <td>6000</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>FFF</td>
+                        <td>5000</td>
+                      </tr>
+                      <tr>
+                        <td>7</td>
+                        <td>GGG</td>
+                        <td>4000</td>
+                      </tr>
+                      <tr>
+                        <td>8</td>
+                        <td>HHH</td>
+                        <td>3000</td>
+                      </tr>
+                      <tr>
+                        <td>9</td>
+                        <td>III</td>
+                        <td>2000</td>
+                      </tr>
+                      <tr>
+                        <td>10</td>
+                        <td>JJJ</td>
+                        <td>1000</td>
+                      </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
           <button className='btn btn-success'>Play</button>
