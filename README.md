@@ -16,3 +16,8 @@ Problem Statements:
 Build Intstructions:
 - [ ] Pull the repo
 - [ ] In your IDE, type "npm run dev"
+
+
+
+Here is a good example of snake in js
+https://github.com/patorjk/JavaScript-Snake
