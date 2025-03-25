@@ -1,6 +1,6 @@
 import './App.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../src/assets/snake-image.jpg'
+import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 
 
@@ -28,7 +28,7 @@ function App() {
         left: 0,
         width: '100%',
         height: '100vh',
-        backgroundImage: `url(${'../src/assets/snake-image.jpg'})`,
+        backgroundImage: `url(${'../src/assets/super_snake_background.png'})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}>
