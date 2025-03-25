@@ -47,7 +47,7 @@ function App() {
           <div id="gameModes" className='col-3' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
             <button className="col-12 btn btn-info">Free Play</button>
             <button className="col-12 btn btn-info">Local Multiplayer</button>
-            <button className="col-12 btn btn-info">Timed Mode</button>
+            <button className="col-12 btn btn-info">Time Attack</button>
           </div>
           <div className='col-6'>
             <h1 hidden>Do nothing here</h1>
