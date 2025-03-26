@@ -65,52 +65,52 @@ function App() {
                       <tr>
                         <td>1</td>
                         <td>AAA</td>
-                        <td>10000</td>
+                        <td>200</td>
                       </tr>
                       <tr>
                         <td>2</td>
                         <td>BBB</td>
-                        <td>9000</td>
+                        <td>180</td>
                       </tr>
                       <tr>
                         <td>3</td>
                         <td>CCC</td>
-                        <td>8000</td>
+                        <td>160</td>
                       </tr>
                       <tr>
                         <td>4</td>
                         <td>DDD</td>
-                        <td>7000</td>
+                        <td>140</td>
                       </tr>
                       <tr>
                         <td>5</td>
                         <td>EEE</td>
-                        <td>6000</td>
+                        <td>120</td>
                       </tr>
                       <tr>
                         <td>6</td>
                         <td>FFF</td>
-                        <td>5000</td>
+                        <td>100</td>
                       </tr>
                       <tr>
                         <td>7</td>
                         <td>GGG</td>
-                        <td>4000</td>
+                        <td>80</td>
                       </tr>
                       <tr>
                         <td>8</td>
                         <td>HHH</td>
-                        <td>3000</td>
+                        <td>60</td>
                       </tr>
                       <tr>
                         <td>9</td>
                         <td>III</td>
-                        <td>2000</td>
+                        <td>40</td>
                       </tr>
                       <tr>
                         <td>10</td>
                         <td>JJJ</td>
-                        <td>1000</td>
+                        <td>20</td>
                       </tr>
               </tbody>
             </table>
