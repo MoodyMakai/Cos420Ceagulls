@@ -4,6 +4,7 @@ import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 
 
+
 function App() {
   const toggleVisibility = (id: string) => {
     const element = document.getElementById(id);
