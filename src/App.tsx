@@ -39,7 +39,9 @@ function App() {
 
         <div className='row'>
           <button className="col-3 btn btn-primary" onClick={() => toggleVisibility("gameModes")}>Game Modes</button>
-          <div className="col-6"></div>
+          <div className="col-2"></div>
+          <button className="col-2 btn btn-success" onClick={() => toggleVisibility("selectSkin")}>Select Skin</button>
+          <div className="col-2"></div>
           <button className="col-3 btn btn-secondary" onClick={() => toggleVisibility("highScores")}>High Scores</button>
         </div>
 
@@ -49,7 +51,15 @@ function App() {
             <button className="col-12 btn btn-info">Local Multiplayer</button>
             <button className="col-12 btn btn-info">Time Attack</button>
           </div>
-          <div className='col-6'>
+          <div className='col-2'>
+            <h1 hidden>Do nothing here</h1>
+          </div>
+          <div id="selectSkin" className='col-2' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
+            <button className="col-12 btn btn-warning"> Skin option 1</button>
+            <button className="col-12 btn btn-warning"> Skin option 2</button>
+            <button className="col-12 btn btn-warning"> Skin option 3</button>
+          </div>
+          <div className='col-2'>
             <h1 hidden>Do nothing here</h1>
           </div>
           <div className='col-3'>
