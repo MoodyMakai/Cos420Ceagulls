@@ -3,6 +3,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
+import '../src/assets/super_snake_skins.png'
 
 
 
@@ -41,7 +42,9 @@ function App() {
         <div className='row'>
           <button className="col-3 btn btn-primary" onClick={() => toggleVisibility("gameModes")}>Game Modes</button>
           <div className="col-2"></div>
-          <button className="col-2 btn btn-success" onClick={() => toggleVisibility("selectSkin")}>Select Skin</button>
+          <button className="col-2 btn btn-success" onClick={() => toggleVisibility("selectSkin")}>
+            <img src = '../src/assets/super_snake_skins.png' alt = "Skins"></img>
+          </button>
           <div className="col-2"></div>
           <button className="col-3 btn btn-secondary" onClick={() => toggleVisibility("highScores")}>High Scores</button>
         </div>
@@ -56,8 +59,8 @@ function App() {
             <h1 hidden>Do nothing here</h1>
           </div>
           <div id="selectSkin" className='col-2' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
-            <button className="col-12 btn btn-warning"> Skin option 1</button>
-            <button className="col-12 btn btn-warning"> Skin option 2</button>
+            <button className="col-12 btn btn-warning"> Default </button>
+            <button className="col-12 btn btn-warning"> Square </button>
             <button className="col-12 btn btn-warning"> Skin option 3</button>
           </div>
           <div className='col-2'>
