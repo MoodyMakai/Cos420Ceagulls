@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Validate pusher
         run: |
-          ALLOWED_USERS=("MatthewTinker" "tjreilly03" "Catzrule5" "MoodyMakai")
+          ALLOWED_USERS=("MatthewTinker" "tjreilly03" "Catzrule5" "MoodyMakai" "gpitt-ctrl")
           echo "Pusher: ${{ github.actor }}"
 
           if [[ ! " ${ALLOWED_USERS[@]} " =~ " ${{ github.actor }} " ]]; then
