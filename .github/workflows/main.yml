@@ -1,0 +1,22 @@
+name: Validate Pusher
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-user:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate pusher
+        run: |
+          ALLOWED_USERS=("MatthewTinker" "tjreilly03" "Catzrule5" "MoodyMakai" "gpitt-ctrl")
+          echo "Pusher: ${{ github.actor }}"
+
+          if [[ ! " ${ALLOWED_USERS[@]} " =~ " ${{ github.actor }} " ]]; then
+            echo "🚫 Push rejected: Unauthorized user ${{ github.actor }}"
+            exit 1
+          else
+            echo "✅ Authorized push by ${{ github.actor }}"
+          fi
