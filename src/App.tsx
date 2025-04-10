@@ -6,8 +6,12 @@ import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
 
 
+import { useState } from 'react';
 
 function App() {
+
+  const [showModal, setShowModal] = useState(false);
+
   const toggleVisibility = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -46,11 +50,15 @@ function App() {
             <img src = '../src/assets/super_snake_skins.png' alt = "Skins"></img>
           </button>
           <div className="col-2"></div>
+          <button className="col-3 btn btn-primary">Game Modes</button>
+          <div className="col-2"></div>
+          <button className="col-2 btn btn-info" onClick={() => setShowModal(true)}>Log In</button>
+          <div className="col-2"></div>
           <button className="col-3 btn btn-secondary" onClick={() => toggleVisibility("highScores")}>High Scores</button>
         </div>
 
         <div className='row'>
-          <div id="gameModes" className='col-3' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
+          <div id="gameModes" className='col-3'>
             <button className="col-12 btn btn-info">Free Play</button>
             <button className="col-12 btn btn-info">Local Multiplayer</button>
             <button className="col-12 btn btn-info">Time Attack</button>
@@ -134,6 +142,29 @@ function App() {
           <button className='btn btn-success'>Play</button>
         </div>
       </div>
+      {showModal && (
+        <div className="modal fade show" tabIndex={-1} style={{ display: 'block'}}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Log In</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label htmlFor="username" className="form-label">Username</label>
+                  <input type="text" className="form-control" id="username" placeholder="Enter your username"/>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                <button type="button" className="btn btn-primary" onClick={() => setShowModal(false)}>Log In</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </>
   );
 }
