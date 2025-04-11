@@ -11,13 +11,13 @@ import { useState, useEffect, useRef } from 'react';
 
 
 function GameBox() {
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  const [x, setX] = useState(1);
+  const [y, setY] = useState(1);
   const [direction, setDirection] = useState<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const step = 20;
-  const boxSize = 400;
+  const boxSize = 402;
   const playerSize = 20;
 
   // Handle keypresses to update direction
@@ -39,13 +39,13 @@ function GameBox() {
 
     intervalRef.current = setInterval(() => {
       setX(prevX => {
-        if (direction === 'ArrowLeft') return Math.max(0, prevX - step);
-        if (direction === 'ArrowRight') return Math.min(boxSize - playerSize, prevX + step);
+        if (direction === 'ArrowLeft') return Math.max(1, prevX - step);
+        if (direction === 'ArrowRight') return Math.min(boxSize - playerSize - 5, prevX + step);
         return prevX;
       });
       setY(prevY => {
-        if (direction === 'ArrowUp') return Math.max(0, prevY - step);
-        if (direction === 'ArrowDown') return Math.min(boxSize - playerSize, prevY + step);
+        if (direction === 'ArrowUp') return Math.max(1, prevY - step);
+        if (direction === 'ArrowDown') return Math.min(boxSize - playerSize-5, prevY + step);
         return prevY;
       });
     }, 300); // adjust interval speed here
@@ -85,7 +85,8 @@ function App() {
 
   const [showModal, setShowModal] = useState(false);
   const [showHighScoresModal, setShowHighScoresModal] = useState(false);
-
+  const [username, setUsername] = useState('');
+  const [inputUsername, setInputUsername] = useState('');
 
   const toggleVisibility = (id: string) => {
     const element = document.getElementById(id);
@@ -99,6 +100,12 @@ function App() {
       }
     }
   };
+
+  const handleLogin = () => {
+    setUsername(inputUsername);
+    setShowModal(false);
+  };
+
   return (
     <>
       <div style={{ 
@@ -148,13 +155,29 @@ function App() {
             <h1 hidden>Do nothing here</h1>
           </div>
         </div>
+
+        {username && (
+          <div style={{
+            textAlign: 'center',
+            marginTop: '10px',
+            fontSize: '24px',
+            color: 'black',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+          }}>
+            Welcome, {username}
+          </div>
+        )}
+
         <GameBox />
         <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
           <button className='btn btn-success'>Play</button>
         </div>
       </div>
-      {showModal && (
-        <div className="modal fade show" tabIndex={-1} style={{ display: 'block'}}>
+{showModal && (
+        <div className="modal fade show" tabIndex={-1} style={{ display: 'block' }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
@@ -164,12 +187,19 @@ function App() {
               <div className="modal-body">
                 <div className="mb-3">
                   <label htmlFor="username" className="form-label">Username</label>
-                  <input type="text" className="form-control" id="username" placeholder="Enter your username"/>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="username"
+                    placeholder="Enter your username"
+                    value={inputUsername}
+                    onChange={(e) => setInputUsername(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                <button type="button" className="btn btn-primary" onClick={() => setShowModal(false)}>Log In</button>
+                <button type="button" className="btn btn-primary" onClick={handleLogin}>Log In</button>
               </div>
             </div>
           </div>
