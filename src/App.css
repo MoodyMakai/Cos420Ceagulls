@@ -40,3 +40,23 @@
 .read-the-docs {
   color: #888;
 }
+
+.highscores-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  background-color: #343a40;
+  color: white;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: 1050;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.highscores-modal.show {
+  transform: translateX(0);
+}

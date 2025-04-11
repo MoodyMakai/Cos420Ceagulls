@@ -7,10 +7,68 @@ import '../src/assets/super_snake_skins.png'
 
 
 import { useState } from 'react';
+import { useEffect } from 'react';
+
+
+function GameBox() {
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  const step = 40;
+  const boxSize = 400;
+  const playerSize = 20;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+      }
+      setX(prevX => {
+        if (e.key === 'ArrowLeft') return Math.max(0, prevX - step);
+        if (e.key === 'ArrowRight') return Math.min(boxSize - playerSize, prevX + step);
+        return prevX;
+      });
+      setY(prevY => {
+        if (e.key === 'ArrowUp') return Math.max(0, prevY - step);
+        if (e.key === 'ArrowDown') return Math.min(boxSize - playerSize, prevY + step);
+        return prevY;
+      });
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  return (
+    <div
+      style={{
+        width: boxSize,
+        height: boxSize,
+        border: '2px solid black',
+        backgroundColor: '#f0f0f0',
+        position: 'relative',
+        margin: '20px auto'
+      }}
+    >
+      <div
+        style={{
+          width: playerSize,
+          height: playerSize,
+          backgroundColor: 'green',
+          position: 'absolute',
+          left: x,
+          top: y
+        }}
+      />
+    </div>
+  );
+}
+
 
 function App() {
 
   const [showModal, setShowModal] = useState(false);
+  const [showHighScoresModal, setShowHighScoresModal] = useState(false);
+
 
   const toggleVisibility = (id: string) => {
     const element = document.getElementById(id);
@@ -24,7 +82,6 @@ function App() {
       }
     }
   };
-
   return (
     <>
       <div style={{ 
@@ -44,17 +101,16 @@ function App() {
         </h1>        
 
         <div className='row'>
-          <button className="col-3 btn btn-primary" onClick={() => toggleVisibility("gameModes")}>Game Modes</button>
-          <div className="col-2"></div>
-          <button className="col-2 btn btn-success" onClick={() => toggleVisibility("selectSkin")}>
-            <img src = '../src/assets/super_snake_skins.png' alt = "Skins"></img>
-          </button>
-          <div className="col-2"></div>
-          <button className="col-3 btn btn-primary">Game Modes</button>
-          <div className="col-2"></div>
-          <button className="col-2 btn btn-info" onClick={() => setShowModal(true)}>Log In</button>
-          <div className="col-2"></div>
-          <button className="col-3 btn btn-secondary" onClick={() => toggleVisibility("highScores")}>High Scores</button>
+            <button className="col-3 btn btn-primary">Game Modes</button> 
+            <div className="col-2"></div>
+            <div className="col-2">
+                <button className="col-12 btn btn-info" onClick={() => setShowModal(true)}>Log In</button>
+                <button className="col-12 btn btn-success" onClick={() => toggleVisibility("selectSkin")}>
+                    <img src = '../src/assets/super_snake_skins.png' alt = "Skins"></img>
+                </button>
+            </div>
+              <div className="col-2"></div>
+              <button className="col-3 btn btn-secondary" onClick={() => setShowHighScoresModal(true)}>High Scores</button>
         </div>
 
         <div className='row'>
@@ -71,19 +127,53 @@ function App() {
             <button className="col-12 btn btn-warning"> Square </button>
             <button className="col-12 btn btn-warning"> Skin option 3</button>
           </div>
-          <div className='col-2'>
+          <div className='col-5'>
             <h1 hidden>Do nothing here</h1>
           </div>
-          <div className='col-3'>
-            <table id="highScores" className='table table-dark' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>User Name</th>
-                  <th>High Score</th>
-                </tr>
-              </thead>
-              <tbody>
+        </div>
+        <GameBox />
+        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
+          <button className='btn btn-success'>Play</button>
+        </div>
+      </div>
+      {showModal && (
+        <div className="modal fade show" tabIndex={-1} style={{ display: 'block'}}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Log In</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label htmlFor="username" className="form-label">Username</label>
+                  <input type="text" className="form-control" id="username" placeholder="Enter your username"/>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                <button type="button" className="btn btn-primary" onClick={() => setShowModal(false)}>Log In</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+{showHighScoresModal && (
+  <div className={`highscores-modal show`}>
+    <div className="d-flex justify-content-between align-items-center mb-3">
+      <h4>High Scores</h4>
+      <button className="btn-close btn-close-white" onClick={() => setShowHighScoresModal(false)}></button>
+    </div>
+    <table className="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>User Name</th>
+          <th>High Score</th>
+        </tr>
+      </thead>
+      <tbody>
                       <tr>
                         <td>1</td>
                         <td>AAA</td>
@@ -135,35 +225,9 @@ function App() {
                         <td>20</td>
                       </tr>
               </tbody>
-            </table>
-          </div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
-          <button className='btn btn-success'>Play</button>
-        </div>
-      </div>
-      {showModal && (
-        <div className="modal fade show" tabIndex={-1} style={{ display: 'block'}}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Log In</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label htmlFor="username" className="form-label">Username</label>
-                  <input type="text" className="form-control" id="username" placeholder="Enter your username"/>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                <button type="button" className="btn btn-primary" onClick={() => setShowModal(false)}>Log In</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+    </table>
+  </div>
+)}
 
     </>
   );
