@@ -6,37 +6,54 @@ import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
 
 
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
 
 
 function GameBox() {
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
-  const step = 40;
+  const [direction, setDirection] = useState<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const step = 20;
   const boxSize = 400;
   const playerSize = 20;
 
+  // Handle keypresses to update direction
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
+        setDirection(e.key as typeof direction);
       }
-      setX(prevX => {
-        if (e.key === 'ArrowLeft') return Math.max(0, prevX - step);
-        if (e.key === 'ArrowRight') return Math.min(boxSize - playerSize, prevX + step);
-        return prevX;
-      });
-      setY(prevY => {
-        if (e.key === 'ArrowUp') return Math.max(0, prevY - step);
-        if (e.key === 'ArrowDown') return Math.min(boxSize - playerSize, prevY + step);
-        return prevY;
-      });
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Move based on direction at an interval
+  useEffect(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      setX(prevX => {
+        if (direction === 'ArrowLeft') return Math.max(0, prevX - step);
+        if (direction === 'ArrowRight') return Math.min(boxSize - playerSize, prevX + step);
+        return prevX;
+      });
+      setY(prevY => {
+        if (direction === 'ArrowUp') return Math.max(0, prevY - step);
+        if (direction === 'ArrowDown') return Math.min(boxSize - playerSize, prevY + step);
+        return prevY;
+      });
+    }, 300); // adjust interval speed here
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [direction]);
 
   return (
     <div
