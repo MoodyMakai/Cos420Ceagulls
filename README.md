@@ -17,7 +17,9 @@ Build Intstructions:
 - [ ] Pull the repo
 - [ ] In your IDE, type "npm run dev"
 
-
-
 Here is a good example of snake in js
 https://github.com/patorjk/JavaScript-Snake
+
+Credits:
+[] vitest: https://vitest.dev/
+[] happy-dom: https://github.com/capricorn86/happy-dom
