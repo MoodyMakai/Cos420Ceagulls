@@ -1,11 +1,9 @@
 import './App.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
-
-
 import { useState, useEffect, useRef } from 'react';
 
 
