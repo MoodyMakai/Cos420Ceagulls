@@ -29,18 +29,29 @@ function GameBox({ gameMode }: { gameMode: string }) {
 
   // Spawn food periodically
   useEffect(() => {
+    if (gameOver) {
+      if (foodSpawnInterval.current) {
+        clearInterval(foodSpawnInterval.current);
+        foodSpawnInterval.current = null;
+      }
+      return;
+    }
+  
     foodSpawnInterval.current = setInterval(() => {
       setFood(prev => [...prev, generateRandomCoords()]);
     }, 5000);
+  
     return () => clearInterval(foodSpawnInterval.current!);
-  }, []);
+  }, [gameOver]);
 
   // Handle arrow key presses
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (gameOver) return; // Ignore input if game is over
+  
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
-
+  
         // Prevent the opposite direction
         if (direction1 === 'ArrowUp' && e.key !== 'ArrowDown') {
           setDirection1(e.key as typeof direction1);
@@ -56,9 +67,11 @@ function GameBox({ gameMode }: { gameMode: string }) {
         }
       }
     };
+  
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [direction1]);
+  }, [direction1, gameOver]);
+  
 
   // Move snake
   useEffect(() => {
@@ -106,12 +119,15 @@ function GameBox({ gameMode }: { gameMode: string }) {
   // Reset the game after a game over
   const handleResetGame = () => {
     setSnake1([{ x: 0, y: 0 }]);
-    setDirection1('ArrowDown'); // Reset to moving down
+    setDirection1('ArrowDown');
     setFood([]);
     setGameOver(false);
-    clearInterval(intervalRef1.current!); // Reset the interval
+  
+    // Clear and reset intervals
+    clearInterval(intervalRef1.current!);
+    clearInterval(foodSpawnInterval.current!);
+    foodSpawnInterval.current = null;
   };
-
   return (
     <div>
       {/* Snake Game */}
