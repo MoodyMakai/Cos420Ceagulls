@@ -5,6 +5,8 @@ import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
 import { useState, useEffect, useRef } from 'react';
+import {Skin} from './interfaces/skins';
+import {SkinCreate} from './components/skin';
 
 function GameBox({ gameMode }: { gameMode: string }) {
   const [snake1, setSnake1] = useState([{ x: 0, y: 0 }]); // Start at (0,0), aligned with grid
@@ -18,6 +20,8 @@ function GameBox({ gameMode }: { gameMode: string }) {
   const step = 20;
   const boxSize = 400;
   const playerSize = 20;
+
+  const skins = loadSkins();
 
   const generateRandomCoords = () => {
     const max = boxSize / step;
@@ -197,6 +201,12 @@ function GameBox({ gameMode }: { gameMode: string }) {
       )}
     </div>
   );
+}
+
+function loadSkins(): Skin[] {
+
+  const skinList = ["default", "square"];
+  return skinList.map((skin: string) => SkinCreate(skin));
 }
 
 
