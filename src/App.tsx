@@ -4,20 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
-import '<div styleName={} />
-<source />
-<assets />
-<skins />default/head.png'
 import { useState, useEffect, useRef } from 'react';
 import {Skin} from './interfaces/skins';
 import {SkinCreate} from './components/skin';
 
-
-function loadSkins(): Skin[] {
-
-  const skinList = ["default", "square"];
-  return skinList.map((skin: string) => SkinCreate(skin));
-}
 
 function GameBox({ gameMode }: { gameMode: string }) {
   const [snake1, setSnake1] = useState([{ x: 0, y: 0 }]); // Start at (0,0), aligned with grid
