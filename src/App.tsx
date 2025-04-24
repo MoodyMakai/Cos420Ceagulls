@@ -11,7 +11,7 @@ import { SkinCreate } from './components/skin';
 function GameBox({ gameMode }: { gameMode: string }) {
   
   const [direction1, setDirection1] = useState<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>('ArrowLeft');
-  const [segmentDirections, setSegmentDirections] = useState<string[]>(['ArrowUp']);
+  const [segmentDirections, setSegmentDirections] = useState<string[]>(['ArrowLeft']);
   const [gameOver, setGameOver] = useState(false);
   const [food, setFood] = useState<{ x: number; y: number }[]>([]);
 
@@ -115,7 +115,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
   const handleResetGame = () => {
     setSnake1([{ x: boxSize / 2, y: boxSize / 2 }]);
     setDirection1('ArrowLeft');
-    setSegmentDirections(['ArrowUp']);
+    setSegmentDirections(['ArrowLeft']);
     setFood([]);
     setGameOver(false);
     clearInterval(intervalRef1.current!);
