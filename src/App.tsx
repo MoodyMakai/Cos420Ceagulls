@@ -5,13 +5,14 @@ import '../src/assets/super_snake_background.png'
 import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
 import { useState, useEffect, useRef } from 'react';
-import {Skin} from './interfaces/skins';
-import {SkinCreate} from './components/skin';
+import { Skin } from './interfaces/skins';
+import { SkinCreate } from './components/skin';
 
 function GameBox({ gameMode }: { gameMode: string }) {
-  const [snake1, setSnake1] = useState([{ x: 0, y: 0 }]); // Start at (0,0), aligned with grid
-  const [direction1, setDirection1] = useState<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>('ArrowDown'); // Start moving down
-  const [gameOver, setGameOver] = useState(false); // Game over state
+  
+  const [direction1, setDirection1] = useState<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>('ArrowLeft');
+  const [segmentDirections, setSegmentDirections] = useState<string[]>(['ArrowUp']);
+  const [gameOver, setGameOver] = useState(false);
   const [food, setFood] = useState<{ x: number; y: number }[]>([]);
 
   const intervalRef1 = useRef<NodeJS.Timeout | null>(null);
@@ -19,16 +20,16 @@ function GameBox({ gameMode }: { gameMode: string }) {
 
   const step = 20;
   const boxSize = 400;
+  const [snake1, setSnake1] = useState([{ x: boxSize / 2, y: boxSize / 2 }]);
   const playerSize = 20;
 
   function loadSkins(): Skin[] {
-
     const skinList = ["default", "square"];
     return skinList.map((skin: string) => SkinCreate(skin));
   }
 
-  const skins = loadSkins(); // Creates a list of skins
-  const selectedSkin = skins[0]
+  const skins = loadSkins();
+  const selectedSkin = skins[0];
 
   const generateRandomCoords = () => {
     const max = boxSize / step;
@@ -38,7 +39,6 @@ function GameBox({ gameMode }: { gameMode: string }) {
     };
   };
 
-  // Spawn food periodically
   useEffect(() => {
     if (gameOver) {
       if (foodSpawnInterval.current) {
@@ -47,101 +47,94 @@ function GameBox({ gameMode }: { gameMode: string }) {
       }
       return;
     }
-  
     foodSpawnInterval.current = setInterval(() => {
       setFood(prev => [...prev, generateRandomCoords()]);
     }, 5000);
-  
     return () => clearInterval(foodSpawnInterval.current!);
   }, [gameOver]);
 
-  // Handle arrow key presses
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameOver) return; // Ignore input if game is over
-  
+      if (gameOver) return;
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
-  
-        // Prevent the opposite direction
-        if (direction1 === 'ArrowUp' && e.key !== 'ArrowDown') {
-          setDirection1(e.key as typeof direction1);
-        }
-        if (direction1 === 'ArrowDown' && e.key !== 'ArrowUp') {
-          setDirection1(e.key as typeof direction1);
-        }
-        if (direction1 === 'ArrowLeft' && e.key !== 'ArrowRight') {
-          setDirection1(e.key as typeof direction1);
-        }
-        if (direction1 === 'ArrowRight' && e.key !== 'ArrowLeft') {
+        const opposites: { [key: string]: string } = {
+          ArrowUp: 'ArrowDown',
+          ArrowDown: 'ArrowUp',
+          ArrowLeft: 'ArrowRight',
+          ArrowRight: 'ArrowLeft'
+        };
+        if (direction1 !== opposites[e.key]) {
           setDirection1(e.key as typeof direction1);
         }
       }
     };
-  
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [direction1, gameOver]);
-  
 
-  // Move snake
   useEffect(() => {
     if (intervalRef1.current) clearInterval(intervalRef1.current);
     intervalRef1.current = setInterval(() => {
       setSnake1(prev => {
         const head = { ...prev[0] };
-
-        // Move based on direction
         if (direction1 === 'ArrowLeft') head.x -= step;
         if (direction1 === 'ArrowRight') head.x += step;
         if (direction1 === 'ArrowUp') head.y -= step;
         if (direction1 === 'ArrowDown') head.y += step;
 
-        // Check if the snake has hit the edge of the screen
         if (head.x < 0 || head.x >= boxSize || head.y < 0 || head.y >= boxSize) {
-          setGameOver(true); // Set game over state if out of bounds
-          clearInterval(intervalRef1.current!); // Stop snake's movement
-          return prev; // Don't update snake if game is over
+          setGameOver(true);
+          clearInterval(intervalRef1.current!);
+          return prev;
         }
 
-        // Check for collision with snake's body (excluding the head itself)
         if (prev.some((seg, index) => index !== 0 && seg.x === head.x && seg.y === head.y)) {
-          setGameOver(true); // Set game over state
-          clearInterval(intervalRef1.current!); // Stop the snake's movement
-          return prev; // Don't update snake if game is over
+          setGameOver(true);
+          clearInterval(intervalRef1.current!);
+          return prev;
         }
 
         const newSnake = [head, ...prev.slice(0, prev.length - 1)];
+        const newDirections = [direction1!, ...segmentDirections.slice(0, segmentDirections.length - 1)];
 
-        // Check for collision with any food
         const foodIndex = food.findIndex(f => f.x === head.x && f.y === head.y);
         if (foodIndex !== -1) {
-          newSnake.push(prev[prev.length - 1]); // Grow snake
-          setFood(prev => prev.filter((_, i) => i !== foodIndex)); // Remove food
+          newSnake.push(prev[prev.length - 1]);
+          newDirections.push(segmentDirections[segmentDirections.length - 1]);
+          setFood(prev => prev.filter((_, i) => i !== foodIndex));
         }
 
+        setSegmentDirections(newDirections);
         return newSnake;
       });
     }, 200);
-
     return () => clearInterval(intervalRef1.current!);
   }, [direction1, food]);
 
-  // Reset the game after a game over
   const handleResetGame = () => {
-    setSnake1([{ x: 0, y: 0 }]);
-    setDirection1('ArrowDown');
+    setSnake1([{ x: boxSize / 2, y: boxSize / 2 }]);
+    setDirection1('ArrowLeft');
+    setSegmentDirections(['ArrowUp']);
     setFood([]);
     setGameOver(false);
-  
-    // Clear and reset intervals
     clearInterval(intervalRef1.current!);
     clearInterval(foodSpawnInterval.current!);
     foodSpawnInterval.current = null;
   };
+
+  const getRotation = (dir: string) => {
+    switch (dir) {
+      case 'ArrowUp': return 'rotate(90deg)';
+      case 'ArrowRight': return 'rotate(180deg)';
+      case 'ArrowDown': return 'rotate(270deg)';
+      case 'ArrowLeft': return 'rotate(0deg)';
+      default: return 'rotate(0deg)';
+    }
+  };
+
   return (
     <div>
-      {/* Snake Game */}
       <div className="col-6"
         style={{
           width: boxSize,
@@ -150,34 +143,31 @@ function GameBox({ gameMode }: { gameMode: string }) {
           backgroundColor: '#f0f0f0',
           position: 'relative',
           margin: '20px auto',
-        }}
-      >
-        {/* Snake */}
+        }}>
         {snake1.map((seg, index) => (
-  <div
-    key={index}
-    style={{
-      width: playerSize,
-      height: playerSize,
-      backgroundImage: `url(${
-        index === 0
-          ? selectedSkin.head
-          : index === snake1.length - 1
-          ? selectedSkin.tail
-          : selectedSkin.body
-      })`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      position: 'absolute',
-      left: seg.x,
-      top: seg.y,
-      zIndex: 10 // optional but helpful to keep it visible
-    }}
-  />
-))}
+          <div
+            key={index}
+            style={{
+              width: playerSize,
+              height: playerSize,
+              backgroundImage: `url(${
+                index === 0
+                  ? selectedSkin.head
+                  : index === snake1.length - 1
+                  ? selectedSkin.tail
+                  : selectedSkin.body
+              })`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              position: 'absolute',
+              left: seg.x,
+              top: seg.y,
+              zIndex: 10,
+              transform: getRotation(segmentDirections[index])
+            }}
+          />
+        ))}
 
-
-        {/* Food */}
         {food.map((f, index) => (
           <div
             key={`food-${index}`}
@@ -193,7 +183,6 @@ function GameBox({ gameMode }: { gameMode: string }) {
         ))}
       </div>
 
-      {/* Game Over Modal */}
       {gameOver && (
         <div
           style={{
@@ -208,8 +197,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
             textAlign: 'center',
             borderRadius: '8px',
             zIndex: 999,
-          }}
-        >
+          }}>
           <h1>Game Over</h1>
           <button onClick={handleResetGame} style={{ marginTop: '10px' }}>
             Restart Game
