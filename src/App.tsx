@@ -21,6 +21,12 @@ function GameBox({ gameMode }: { gameMode: string }) {
   const boxSize = 400;
   const playerSize = 20;
 
+  function loadSkins(): Skin[] {
+
+    const skinList = ["default", "square"];
+    return skinList.map((skin: string) => SkinCreate(skin));
+  }
+
   const skins = loadSkins(); // Creates a list of skins
   const selectedSkin = skins[0]
 
@@ -153,7 +159,9 @@ function GameBox({ gameMode }: { gameMode: string }) {
             style={{
               width: playerSize,
               height: playerSize,
-              backgroundImage: index === 0 ? selectedSkin.head : selectedSkin.body,
+              backgroundImage: `url(${index === 0 ? selectedSkin.head : selectedSkin.body})`,
+              backgroundSize: 'cover', // or 'contain' depending on your needs
+              backgroundRepeat: 'no-repeat',
               position: 'absolute',
               left: seg.x,
               top: seg.y
@@ -202,12 +210,6 @@ function GameBox({ gameMode }: { gameMode: string }) {
       )}
     </div>
   );
-}
-
-function loadSkins(): Skin[] {
-
-  const skinList = ["default", "square"];
-  return skinList.map((skin: string) => SkinCreate(skin));
 }
 
 
