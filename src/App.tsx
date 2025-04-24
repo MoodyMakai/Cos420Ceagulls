@@ -21,7 +21,8 @@ function GameBox({ gameMode }: { gameMode: string }) {
   const boxSize = 400;
   const playerSize = 20;
 
-  const skins = loadSkins();
+  const skins = loadSkins(); // Creates a list of skins
+  const selectedSkin = skins[0]
 
   const generateRandomCoords = () => {
     const max = boxSize / step;
@@ -152,7 +153,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
             style={{
               width: playerSize,
               height: playerSize,
-              backgroundColor: index === 0 ? 'green' : 'lightgreen',
+              backgroundImage: index === 0 ? selectedSkin.head : selectedSkin.body,
               position: 'absolute',
               left: seg.x,
               top: seg.y
