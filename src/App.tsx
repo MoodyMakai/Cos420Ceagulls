@@ -154,20 +154,28 @@ function GameBox({ gameMode }: { gameMode: string }) {
       >
         {/* Snake */}
         {snake1.map((seg, index) => (
-          <div
-            key={index}
-            style={{
-              width: playerSize,
-              height: playerSize,
-              backgroundImage: `url(${index === 0 ? selectedSkin.head : selectedSkin.body})`,
-              backgroundSize: 'cover', // or 'contain' depending on your needs
-              backgroundRepeat: 'no-repeat',
-              position: 'absolute',
-              left: seg.x,
-              top: seg.y
-            }}
-          />
-        ))}
+  <div
+    key={index}
+    style={{
+      width: playerSize,
+      height: playerSize,
+      backgroundImage: `url(${
+        index === 0
+          ? selectedSkin.head
+          : index === snake1.length - 1
+          ? selectedSkin.tail
+          : selectedSkin.body
+      })`,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      position: 'absolute',
+      left: seg.x,
+      top: seg.y,
+      zIndex: 10 // optional but helpful to keep it visible
+    }}
+  />
+))}
+
 
         {/* Food */}
         {food.map((f, index) => (
@@ -287,9 +295,9 @@ const selectGameMode = (mode: string) => {
             <h1 hidden>Do nothing here</h1>
           </div>
           <div id="selectSkin" className='col-2' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
-            <button className="col-12 btn btn-warning"> Default </button>
-            <button className="col-12 btn btn-warning"> Square </button>
-            <button className="col-12 btn btn-warning"> Skin option 3</button>
+            <button className="col-12 btn btn-warning"> <img src='/skins/default/head.png'></img> Default </button>
+            <button className="col-12 btn btn-warning"><img src='/skins/default/head.png'></img> Square </button>
+            <button className="col-12 btn btn-warning"><img src='/skins/default/head.png'></img> Skin option 3</button>
           </div>
           <div className='col-5'>
             <h1 hidden>Do nothing here</h1>
