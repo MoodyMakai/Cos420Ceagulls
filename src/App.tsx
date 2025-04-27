@@ -184,7 +184,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
   } else {
     // BODY segment
     const prev = snake1[index - 1];
-    const next = snake1[index + 1];
+    const next = snake1[index];
 
     // Check if straight line
     if (prev.dir === next.dir) {
@@ -198,24 +198,24 @@ function GameBox({ gameMode }: { gameMode: string }) {
       // Figure out the rotation for turn
       if (
         (prev.dir === 'ArrowUp' && next.dir === 'ArrowLeft') ||
-        (prev.dir === 'ArrowLeft' && next.dir === 'ArrowUp')
-      ) {
-        rotation = 90; // Turn: Up to Left
-      } else if (
-        (prev.dir === 'ArrowUp' && next.dir === 'ArrowRight') ||
-        (prev.dir === 'ArrowRight' && next.dir === 'ArrowUp')
-      ) {
-        rotation = 180; // Turn: Up to Right
-      } else if (
-        (prev.dir === 'ArrowDown' && next.dir === 'ArrowLeft') ||
-        (prev.dir === 'ArrowLeft' && next.dir === 'ArrowDown')
-      ) {
-        rotation = 0; // Turn: Down to Left
-      } else if (
-        (prev.dir === 'ArrowDown' && next.dir === 'ArrowRight') ||
         (prev.dir === 'ArrowRight' && next.dir === 'ArrowDown')
       ) {
-        rotation = 270; // Turn: Down to Right
+        rotation = 90; // Turn: Up to Right AND Left to Down
+      } else if (
+        (prev.dir === 'ArrowUp' && next.dir === 'ArrowRight') ||
+        (prev.dir === 'ArrowLeft' && next.dir === 'ArrowDown')
+      ) {
+        rotation = 0; // Turn: Down to Left AND Right to Up
+      } else if (
+        (prev.dir === 'ArrowDown' && next.dir === 'ArrowLeft') ||
+        (prev.dir === 'ArrowRight' && next.dir === 'ArrowUp')
+      ) {
+        rotation = 180; // Turn: Down to Right AND Left to Up
+      } else if (
+        (prev.dir === 'ArrowDown' && next.dir === 'ArrowRight') ||
+        (prev.dir === 'ArrowLeft' && next.dir === 'ArrowUp')
+      ) {
+        rotation = 270; // Turn: Down to Right AND Left to Up
       }
     }
   }
