@@ -9,20 +9,27 @@ import { Skin } from './interfaces/skins';
 import { SkinCreate } from './components/skin';
 
 function GameBox({ gameMode }: { gameMode: string }) {
-  
+  // Snake 1
   const [direction1, setDirection1] = useState<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>('ArrowLeft');
-  const [segmentDirections, setSegmentDirections] = useState<string[]>(['ArrowLeft']);
+  const [segmentDirections1, setSegmentDirections1] = useState<string[]>(['ArrowLeft']);
+  const [snake1, setSnake1] = useState([{ x: 100, y: 100 }]); // Start slightly offset
+  
+  // Snake 2 (for multiplayer)
+  const [direction2, setDirection2] = useState<'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' | null>('KeyD');
+  const [segmentDirections2, setSegmentDirections2] = useState<string[]>(['KeyD']);
+  const [snake2, setSnake2] = useState([{ x: 300, y: 300 }]);
+  
   const [gameOver, setGameOver] = useState(false);
   const [food, setFood] = useState<{ x: number; y: number }[]>([]);
-
+  
   const intervalRef1 = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef2 = useRef<NodeJS.Timeout | null>(null);
   const foodSpawnInterval = useRef<NodeJS.Timeout | null>(null);
 
   const step = 20;
   const boxSize = 400;
-  const [snake1, setSnake1] = useState([{ x: boxSize / 2, y: boxSize / 2 }]);
   const playerSize = 20;
-
+  
   function loadSkins(): Skin[] {
     const skinList = ["default", "square"];
     return skinList.map((skin: string) => SkinCreate(skin));
@@ -53,9 +60,11 @@ function GameBox({ gameMode }: { gameMode: string }) {
     return () => clearInterval(foodSpawnInterval.current!);
   }, [gameOver]);
 
+  // Player 1 Controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (gameOver) return;
+
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
         const opposites: { [key: string]: string } = {
@@ -68,57 +77,107 @@ function GameBox({ gameMode }: { gameMode: string }) {
           setDirection1(e.key as typeof direction1);
         }
       }
+      // Player 2 Controls (WASD)
+      if (['w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
+        e.preventDefault();
+        const keyMap: { [key: string]: 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' } = {
+          w: 'KeyW',
+          W: 'KeyW',
+          a: 'KeyA',
+          A: 'KeyA',
+          s: 'KeyS',
+          S: 'KeyS',
+          d: 'KeyD',
+          D: 'KeyD',
+        };
+        const opposites: { [key: string]: string } = {
+          KeyW: 'KeyS',
+          KeyS: 'KeyW',
+          KeyA: 'KeyD',
+          KeyD: 'KeyA'
+        };
+        if (direction2 !== opposites[keyMap[e.key]]) {
+          setDirection2(keyMap[e.key]);
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [direction1, gameOver]);
+  }, [direction1, direction2, gameOver]);
 
+  // Snake 1 movement
   useEffect(() => {
     if (intervalRef1.current) clearInterval(intervalRef1.current);
     intervalRef1.current = setInterval(() => {
-      setSnake1(prev => {
-        const head = { ...prev[0] };
-        if (direction1 === 'ArrowLeft') head.x -= step;
-        if (direction1 === 'ArrowRight') head.x += step;
-        if (direction1 === 'ArrowUp') head.y -= step;
-        if (direction1 === 'ArrowDown') head.y += step;
-
-        if (head.x < 0 || head.x >= boxSize || head.y < 0 || head.y >= boxSize) {
-          setGameOver(true);
-          clearInterval(intervalRef1.current!);
-          return prev;
-        }
-
-        if (prev.some((seg, index) => index !== 0 && seg.x === head.x && seg.y === head.y)) {
-          setGameOver(true);
-          clearInterval(intervalRef1.current!);
-          return prev;
-        }
-
-        const newSnake = [head, ...prev.slice(0, prev.length - 1)];
-        const newDirections = [direction1!, ...segmentDirections.slice(0, segmentDirections.length - 1)];
-
-        const foodIndex = food.findIndex(f => f.x === head.x && f.y === head.y);
-        if (foodIndex !== -1) {
-          newSnake.push(prev[prev.length - 1]);
-          newDirections.push(segmentDirections[segmentDirections.length - 1]);
-          setFood(prev => prev.filter((_, i) => i !== foodIndex));
-        }
-
-        setSegmentDirections(newDirections);
-        return newSnake;
-      });
+      moveSnake(setSnake1, direction1, segmentDirections1, setSegmentDirections1);
     }, 200);
     return () => clearInterval(intervalRef1.current!);
   }, [direction1, food]);
 
+  // Snake 2 movement if Local Multiplayer
+  useEffect(() => {
+    if (gameMode !== "Local Multiplayer") return;
+    if (intervalRef2.current) clearInterval(intervalRef2.current);
+    intervalRef2.current = setInterval(() => {
+      moveSnake(setSnake2, direction2, segmentDirections2, setSegmentDirections2, true);
+    }, 200);
+    return () => clearInterval(intervalRef2.current!);
+  }, [direction2, food, gameMode]);
+
+  const moveSnake = (
+    setSnake: React.Dispatch<React.SetStateAction<{ x: number; y: number }[]>>,
+    direction: string | null,
+    segmentDirections: string[],
+    setSegmentDirections: React.Dispatch<React.SetStateAction<string[]>>,
+    isSecondSnake = false
+  ) => {
+    setSnake(prev => {
+      const head = { ...prev[0] };
+      if (!head || !direction) return prev;
+
+      if (direction === 'ArrowLeft' || direction === 'KeyA') head.x -= step;
+      if (direction === 'ArrowRight' || direction === 'KeyD') head.x += step;
+      if (direction === 'ArrowUp' || direction === 'KeyW') head.y -= step;
+      if (direction === 'ArrowDown' || direction === 'KeyS') head.y += step;
+
+      if (head.x < 0 || head.x >= boxSize || head.y < 0 || head.y >= boxSize) {
+        setGameOver(true);
+        clearInterval(isSecondSnake ? intervalRef2.current! : intervalRef1.current!);
+        return prev;
+      }
+
+      if (prev.some((seg, index) => index !== 0 && seg.x === head.x && seg.y === head.y)) {
+        setGameOver(true);
+        clearInterval(isSecondSnake ? intervalRef2.current! : intervalRef1.current!);
+        return prev;
+      }
+
+      const newSnake = [head, ...prev.slice(0, prev.length - 1)];
+      const newDirections = [direction!, ...segmentDirections.slice(0, segmentDirections.length - 1)];
+
+      const foodIndex = food.findIndex(f => f.x === head.x && f.y === head.y);
+      if (foodIndex !== -1) {
+        newSnake.push(prev[prev.length - 1]);
+        newDirections.push(segmentDirections[segmentDirections.length - 1]);
+        setFood(prev => prev.filter((_, i) => i !== foodIndex));
+      }
+
+      setSegmentDirections(newDirections);
+      return newSnake;
+    });
+  };
+
   const handleResetGame = () => {
-    setSnake1([{ x: boxSize / 2, y: boxSize / 2 }]);
+    setSnake1([{ x: 100, y: 100 }]);
+    setSnake2([{ x: 300, y: 300 }]);
     setDirection1('ArrowLeft');
-    setSegmentDirections(['ArrowLeft']);
+    setDirection2('KeyD');
+    setSegmentDirections1(['ArrowLeft']);
+    setSegmentDirections2(['KeyD']);
     setFood([]);
     setGameOver(false);
     clearInterval(intervalRef1.current!);
+    clearInterval(intervalRef2.current!);
     clearInterval(foodSpawnInterval.current!);
     foodSpawnInterval.current = null;
   };
@@ -129,6 +188,10 @@ function GameBox({ gameMode }: { gameMode: string }) {
       case 'ArrowRight': return 'rotate(180deg)';
       case 'ArrowDown': return 'rotate(270deg)';
       case 'ArrowLeft': return 'rotate(0deg)';
+      case 'KeyW': return 'rotate(90deg)';
+      case 'KeyD': return 'rotate(180deg)';
+      case 'KeyS': return 'rotate(270deg)';
+      case 'KeyA': return 'rotate(0deg)';
       default: return 'rotate(0deg)';
     }
   };
@@ -144,9 +207,10 @@ function GameBox({ gameMode }: { gameMode: string }) {
           position: 'relative',
           margin: '20px auto',
         }}>
+        {/* Snake 1 */}
         {snake1.map((seg, index) => (
           <div
-            key={index}
+            key={`snake1-${index}`}
             style={{
               width: playerSize,
               height: playerSize,
@@ -163,11 +227,29 @@ function GameBox({ gameMode }: { gameMode: string }) {
               left: seg.x,
               top: seg.y,
               zIndex: 10,
-              transform: getRotation(segmentDirections[index])
+              transform: getRotation(segmentDirections1[index])
             }}
           />
         ))}
 
+        {/* Snake 2 */}
+        {gameMode === "Local Multiplayer" && snake2.map((seg, index) => (
+          <div
+            key={`snake2-${index}`}
+            style={{
+              width: playerSize,
+              height: playerSize,
+              backgroundColor: index === 0 ? 'blue' : 'lightblue',
+              position: 'absolute',
+              left: seg.x,
+              top: seg.y,
+              zIndex: 10,
+              transform: getRotation(segmentDirections2[index])
+            }}
+          />
+        ))}
+
+        {/* Food */}
         {food.map((f, index) => (
           <div
             key={`food-${index}`}
@@ -183,6 +265,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
         ))}
       </div>
 
+      {/* Game Over Screen */}
       {gameOver && (
         <div
           style={{
@@ -207,7 +290,6 @@ function GameBox({ gameMode }: { gameMode: string }) {
     </div>
   );
 }
-
 
 function App() {
 
@@ -320,7 +402,8 @@ const selectGameMode = (mode: string) => {
           )}
           <div className='col-4'></div>
         </div>
-        <GameBox gameMode={gameMode} />
+        <GameBox key={gameMode} gameMode={gameMode} />
+
         
         <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 20 }}>
           <button className='btn btn-success'>Play</button>
