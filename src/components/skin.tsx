@@ -8,7 +8,8 @@ export function SkinCreate(name: string): Skin {
         head: `${basePath}/head.png`, 
         body: `${basePath}/body.png`,
         tail: `${basePath}/tail.png`,
-        turn: `${basePath}/turn.png`
+        turn: `${basePath}/turn.png`,
+        fruit: `${basePath}/fruit.png`
     };
 }
 

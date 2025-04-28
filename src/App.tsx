@@ -32,7 +32,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
 
   const step = 20;
   const boxSize = 400;
-  const playerSize = 20;
+  const playerSize = 24;
 
 
   const generateRandomCoords = () => {
@@ -162,63 +162,63 @@ function GameBox({ gameMode }: { gameMode: string }) {
         }}
       >
         {/* Snake */}
-{snake1.map((seg, index) => {
-  let sprite = '';
-  let rotation = 0;
+    {snake1.map((seg, index) => {
+      let sprite = '';
+      let rotation = 0;
 
-  if (index === 0) {
-    // HEAD segment
-    sprite = selectedSkin.head;
-    if (seg.dir === 'ArrowUp') rotation = 90;
-    if (seg.dir === 'ArrowRight') rotation = 180;
-    if (seg.dir === 'ArrowDown') rotation = 270;
-    if (seg.dir === 'ArrowLeft') rotation = 0;
-  } else if (index === snake1.length - 1) {
-    // TAIL segment
-    sprite = selectedSkin.tail;
-    const prev = snake1[index - 1];
-    if (prev.dir === 'ArrowUp') rotation = 90;
-    if (prev.dir === 'ArrowRight') rotation = 180;
-    if (prev.dir === 'ArrowDown') rotation = 270;
-    if (prev.dir === 'ArrowLeft') rotation = 0;
-  } else {
-    // BODY segment
-    const prev = snake1[index - 1];
-    const next = snake1[index];
+      if (index === 0) {
+        // HEAD segment
+        sprite = selectedSkin.head;
+        if (seg.dir === 'ArrowUp') rotation = 90;
+        if (seg.dir === 'ArrowRight') rotation = 180;
+        if (seg.dir === 'ArrowDown') rotation = 270;
+        if (seg.dir === 'ArrowLeft') rotation = 0;
+      } else if (index === snake1.length - 1) {
+        // TAIL segment
+        sprite = selectedSkin.tail;
+        const prev = snake1[index - 1];
+        if (prev.dir === 'ArrowUp') rotation = 90;
+        if (prev.dir === 'ArrowRight') rotation = 180;
+        if (prev.dir === 'ArrowDown') rotation = 270;
+        if (prev.dir === 'ArrowLeft') rotation = 0;
+      } else {
+        // BODY segment
+        const prev = snake1[index - 1];
+        const next = snake1[index];
 
-    // Check if straight line
-    if (prev.dir === next.dir) {
-      sprite = selectedSkin.body; // Straight body
-      if (seg.dir === 'ArrowUp' || seg.dir === 'ArrowDown') rotation = 270; // Vertical
-      else rotation = 0; // Horizontal
-    } else {
-      // Turning
-      sprite = selectedSkin.turn;
+        // Check if straight line
+        if (prev.dir === next.dir) {
+          sprite = selectedSkin.body; // Straight body
+          if (seg.dir === 'ArrowUp' || seg.dir === 'ArrowDown') rotation = 270; // Vertical
+          else rotation = 0; // Horizontal
+        } else {
+          // Turning
+          sprite = selectedSkin.turn;
 
-      // Figure out the rotation for turn
-      if (
-        (prev.dir === 'ArrowUp' && next.dir === 'ArrowLeft') ||
-        (prev.dir === 'ArrowRight' && next.dir === 'ArrowDown')
-      ) {
-        rotation = 90; // Turn: Up to Right AND Left to Down
-      } else if (
-        (prev.dir === 'ArrowUp' && next.dir === 'ArrowRight') ||
-        (prev.dir === 'ArrowLeft' && next.dir === 'ArrowDown')
-      ) {
-        rotation = 0; // Turn: Down to Left AND Right to Up
-      } else if (
-        (prev.dir === 'ArrowDown' && next.dir === 'ArrowLeft') ||
-        (prev.dir === 'ArrowRight' && next.dir === 'ArrowUp')
-      ) {
-        rotation = 180; // Turn: Down to Right AND Left to Up
-      } else if (
-        (prev.dir === 'ArrowDown' && next.dir === 'ArrowRight') ||
-        (prev.dir === 'ArrowLeft' && next.dir === 'ArrowUp')
-      ) {
-        rotation = 270; // Turn: Down to Right AND Left to Up
-      }
+        // Figure out the rotation for turn
+        if (
+          (prev.dir === 'ArrowUp' && next.dir === 'ArrowLeft') ||
+          (prev.dir === 'ArrowRight' && next.dir === 'ArrowDown')
+        ) {
+          rotation = 90; // Turn: Up to Right AND Left to Down
+        } else if (
+          (prev.dir === 'ArrowUp' && next.dir === 'ArrowRight') ||
+          (prev.dir === 'ArrowLeft' && next.dir === 'ArrowDown')
+        ) {
+          rotation = 0; // Turn: Down to Left AND Right to Up
+        } else if (
+          (prev.dir === 'ArrowDown' && next.dir === 'ArrowLeft') ||
+          (prev.dir === 'ArrowRight' && next.dir === 'ArrowUp')
+        ) {
+          rotation = 180; // Turn: Down to Right AND Left to Up
+        } else if (
+          (prev.dir === 'ArrowDown' && next.dir === 'ArrowRight') ||
+          (prev.dir === 'ArrowLeft' && next.dir === 'ArrowUp')
+        ) {
+          rotation = 270; // Turn: Down to Right AND Left to Up
+          }
+        }
     }
-  }
 
   return (
     <div
@@ -246,7 +246,7 @@ function GameBox({ gameMode }: { gameMode: string }) {
             style={{
               width: playerSize,
               height: playerSize,
-              backgroundColor: 'red',
+              backgroundImage: `url(${selectedSkin.fruit})`,
               position: 'absolute',
               left: f.x,
               top: f.y
