@@ -13,7 +13,7 @@ export function SkinCreate(name: string): Skin {
 }
 
 export function loadSkins(): Skin[] {
-    const skinList = ["default", "square"];
+    const skinList = ["default", "square", "blurple"];
     return skinList.map((skin: string) => SkinCreate(skin));
 }
 

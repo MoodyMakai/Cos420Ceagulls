@@ -358,7 +358,7 @@ const selectGameMode = (mode: string) => {
           <div id="selectSkin" className='col-2' style={{ visibility: 'hidden', height: '0', overflow: 'hidden' }}>
             <button className="col-12 btn btn-warning" onClick={() => updateSkin(0)}> Default </button>
             <button className="col-12 btn btn-warning" onClick={() => updateSkin(1)}> Square </button>
-            <button className="col-12 btn btn-warning"> Skin option 3</button>
+            <button className="col-12 btn btn-warning" onClick={() => updateSkin(2)}> Blurple </button>
           </div>
           <div className='col-5'>
             <h1 hidden>Do nothing here</h1>
