@@ -14,9 +14,11 @@ import {loadSkins} from './components/skin';
 
 const skins = loadSkins(); // Creates a list of skins
 let selectedSkin:Skin = skins[0]
+let selectedSkin2:Skin = skins[1]
 
 function updateSkin(index: number){
   selectedSkin = skins[index];
+  selectedSkin2 = skins[(index +1) % 3]
 }
 
 
@@ -29,6 +31,11 @@ function GameBox({ gameMode }: { gameMode: string }) {
 
   const intervalRef1 = useRef<NodeJS.Timeout | null>(null);
   const foodSpawnInterval = useRef<NodeJS.Timeout | null>(null);
+
+  const [snake2, setSnake2] = useState([{ x: 60, y: 60, dir: 'KeyD' as 'KeyW' | 'KeyS' | 'KeyA' | 'KeyD' }]);
+  const [direction2, setDirection2] = useState<'KeyW' | 'KeyS' | 'KeyA' | 'KeyD'>('KeyD'); // Start moving right
+
+
 
   const step = 20;
   const boxSize = 400;
@@ -82,11 +89,35 @@ function GameBox({ gameMode }: { gameMode: string }) {
           setDirection1(e.key as typeof direction1);
         }
       }
+
+            // Player 2 Controls (WASD)
+            if (['w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
+              e.preventDefault();
+              const keyMap: { [key: string]: 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' } = {
+                w: 'KeyW',
+                W: 'KeyW',
+                a: 'KeyA',
+                A: 'KeyA',
+                s: 'KeyS',
+                S: 'KeyS',
+                d: 'KeyD',
+                D: 'KeyD',
+              };
+              const opposites: { [key: string]: string } = {
+                KeyW: 'KeyS',
+                KeyS: 'KeyW',
+                KeyA: 'KeyD',
+                KeyD: 'KeyA'
+              };
+              if (direction2 !== opposites[keyMap[e.key]]) {
+                setDirection2(keyMap[e.key]);
+              }
+            }
     };
   
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [direction1, gameOver]);
+  }, [direction1, direction2, gameOver]);
   
 
   // Move snake
@@ -130,15 +161,57 @@ function GameBox({ gameMode }: { gameMode: string }) {
       
         return newSnake;
       });
+
+
+      setSnake2(prev => {
+        if (gameMode !== "Local Multiplayer") return prev;
+        const head = { ...prev[0] };
+      
+        // Move head based on current direction
+        if (direction2 === 'KeyA') head.x -= step;
+        if (direction2 === 'KeyD') head.x += step;
+        if (direction2 === 'KeyW') head.y -= step;
+        if (direction2 === 'KeyS') head.y += step;
+      
+        // Check if the snake has hit the edge of the screen
+        if (head.x < 0 || head.x >= boxSize || head.y < 0 || head.y >= boxSize) {
+          setGameOver(true);
+          clearInterval(intervalRef1.current!);
+          return prev;
+        }
+      
+        // Check for collision with snake's body (excluding the head itself)
+        if (prev.some((seg, index) => index !== 0 && seg.x === head.x && seg.y === head.y)) {
+          setGameOver(true);
+          clearInterval(intervalRef1.current!);
+          return prev;
+        }
+      
+        // Assign new head direction
+        head.dir = direction2;
+      
+        let newSnake = [head, ...prev.slice(0, prev.length - 1)];
+      
+        // Check for collision with any food
+        const foodIndex = food.findIndex(f => f.x === head.x && f.y === head.y);
+        if (foodIndex !== -1) {
+          newSnake = [...newSnake, { ...newSnake[newSnake.length - 1] }]; // Grow snake by duplicating last segment
+          setFood(prev => prev.filter((_, i) => i !== foodIndex)); // Remove the food
+        }
+      
+        return newSnake;
+      });
     }, 200);
 
     return () => clearInterval(intervalRef1.current!);
-  }, [direction1, food]);
+  }, [direction1, direction2, food]);
 
   // Reset the game after a game over
   const handleResetGame = () => {
     setSnake1([{ x: 0, y: 0 , dir: "ArrowDown"}]);
     setDirection1('ArrowDown');
+    setSnake2([{ x: 60, y: 60 , dir: "KeyD"}]);
+    setDirection2('KeyW');
     setFood([]);
     setGameOver(false);
   
@@ -239,6 +312,84 @@ function GameBox({ gameMode }: { gameMode: string }) {
   );
 })}
 
+
+{snake2.map((seg, index) => {
+      let sprite2 = '';
+      let rotation = 0;
+
+      if (index === 0) {
+        // HEAD segment
+        sprite2 = selectedSkin2.head;
+        if (seg.dir === 'KeyW') rotation = 90;
+        if (seg.dir === 'KeyD') rotation = 180;
+        if (seg.dir === 'KeyS') rotation = 270;
+        if (seg.dir === 'KeyA') rotation = 0;
+      } else if (index === snake1.length - 1) {
+        // TAIL segment
+        sprite2 = selectedSkin2.tail;
+        const prev = snake2[index - 1];
+        if (prev.dir === 'KeyW') rotation = 90;
+        if (prev.dir === 'KeyD') rotation = 180;
+        if (prev.dir === 'KeyS') rotation = 270;
+        if (prev.dir === 'KeyA') rotation = 0;
+      } else {
+        // BODY segment
+        const prev = snake2[index - 1];
+        const next = snake2[index];
+
+        // Check if straight line
+        if (prev.dir === next.dir) {
+          sprite2 = selectedSkin2.body; // Straight body
+          if (seg.dir === 'KeyW' || seg.dir === 'KeyS') rotation = 270; // Vertical
+          else rotation = 0; // Horizontal
+        } else {
+          // Turning
+          sprite2 = selectedSkin2.turn;
+
+        // Figure out the rotation for turn
+        if (
+          (prev.dir === 'KeyW' && next.dir === 'KeyA') ||
+          (prev.dir === 'KeyD' && next.dir === 'KeyS')
+        ) {
+          rotation = 90; // Turn: Up to Right AND Left to Down
+        } else if (
+          (prev.dir === 'KeyW' && next.dir === 'KeyD') ||
+          (prev.dir === 'KeyA' && next.dir === 'KeyS')
+        ) {
+          rotation = 0; // Turn: Down to Left AND Right to Up
+        } else if (
+          (prev.dir === 'KeyS' && next.dir === 'KeyA') ||
+          (prev.dir === 'KeyD' && next.dir === 'KeyW')
+        ) {
+          rotation = 180; // Turn: Down to Right AND Left to Up
+        } else if (
+          (prev.dir === 'KeyS' && next.dir === 'KeyD') ||
+          (prev.dir === 'KeyA' && next.dir === 'KeyW')
+        ) {
+          rotation = 270; // Turn: Down to Right AND Left to Up
+          }
+        }
+    }
+
+  return (
+    gameMode === "Local Multiplayer"  && 
+    <div
+      key={index}
+      style={{
+        width: playerSize,
+        height: playerSize,
+        backgroundImage: `url(${sprite2})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        position: 'absolute',
+        left: seg.x,
+        top: seg.y,
+        transform: `rotate(${rotation}deg)`,
+        transformOrigin: 'center center',
+      }}
+    />
+  );
+})}
         {/* Food */}
         {food.map((f, index) => (
           <div
