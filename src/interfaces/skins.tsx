@@ -6,4 +6,5 @@ export interface Skin {
     body: string, //the body of the snake
     tail: string, //the tail of the snake
     turn: string, //the turning animation of the snake
+    fruit: string, //the sprite of the fruit the snake can eat
 }

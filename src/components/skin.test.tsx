@@ -11,17 +11,17 @@ describe("App Tests", () => {
 
     test("Body sprite loads correct", () => {
         const skin = SkinCreate("default");
-        expect(skin.head === "../default/head.png");
+        expect(skin.body === "../default/body.png");
     });
 
-    test(" sprite loads correct", () => {
+    test("Tail sprite loads correct", () => {
         const skin = SkinCreate("default");
-        expect(skin.head === "../default/head.png");
+        expect(skin.tail === "../default/tail.png");
     });
 
-    test("Head sprite loads correct", () => {
+    test("Turn sprite loads correct", () => {
         const skin = SkinCreate("default");
-        expect(skin.head === "../default/head.png");
+        expect(skin.turn === "../default/turn.png");
     });
 
 });
