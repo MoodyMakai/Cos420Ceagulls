@@ -480,9 +480,7 @@ const selectGameMode = (mode: string) => {
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}>
-        <h1>
-          <img src = '../src/assets/super_snake_logo.png' alt = "SUPER SNAKE"></img>
-        </h1>        
+              
 
         <div className='row'>
             <button className="col-3 btn btn-primary">Game Modes</button> 
