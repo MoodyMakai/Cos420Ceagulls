@@ -21,6 +21,15 @@ function updateSkin(index: number){
   selectedSkin2 = skins[(index +1) % 3]
 }
 
+let scoreSnake1 = 0;
+let scoreSnake2 = 0;
+
+function updateGlobalScore1(globalscore1: number){
+  scoreSnake1 = globalscore1;
+}
+function updateGlobalScore2(globalscore2: number){
+  scoreSnake2 = globalscore2;
+}
 
 
 function GameBox({ gameMode }: { gameMode: string }) {
@@ -35,7 +44,8 @@ function GameBox({ gameMode }: { gameMode: string }) {
   const [snake2, setSnake2] = useState([{ x: 60, y: 60, dir: 'KeyD' as 'KeyW' | 'KeyS' | 'KeyA' | 'KeyD' }]);
   const [direction2, setDirection2] = useState<'KeyW' | 'KeyS' | 'KeyA' | 'KeyD'>('KeyD'); // Start moving right
 
-
+  const [score1, updateScore1] = useState<number>(0);
+  const [score2, updateScore2] = useState<number>(0);
 
   const step = 20;
   const boxSize = 400;
@@ -155,6 +165,9 @@ function GameBox({ gameMode }: { gameMode: string }) {
         // Check for collision with any food
         const foodIndex = food.findIndex(f => f.x === head.x && f.y === head.y);
         if (foodIndex !== -1) {
+          updateGlobalScore1(score1+1);
+          updateScore1(scoreSnake1+1);
+
           newSnake = [...newSnake, { ...newSnake[newSnake.length - 1] }]; // Grow snake by duplicating last segment
           setFood(prev => prev.filter((_, i) => i !== foodIndex)); // Remove the food
         }
@@ -195,6 +208,8 @@ function GameBox({ gameMode }: { gameMode: string }) {
         // Check for collision with any food
         const foodIndex = food.findIndex(f => f.x === head.x && f.y === head.y);
         if (foodIndex !== -1) {
+          updateGlobalScore2(score2+1);
+          updateScore2(scoreSnake2+1);
           newSnake = [...newSnake, { ...newSnake[newSnake.length - 1] }]; // Grow snake by duplicating last segment
           setFood(prev => prev.filter((_, i) => i !== foodIndex)); // Remove the food
         }
@@ -214,7 +229,10 @@ function GameBox({ gameMode }: { gameMode: string }) {
     setDirection2('KeyW');
     setFood([]);
     setGameOver(false);
-  
+    updateGlobalScore1(0);
+    updateGlobalScore2(0);
+    updateScore1(0);
+    updateScore2(0);
     // Clear and reset intervals
     clearInterval(intervalRef1.current!);
     clearInterval(foodSpawnInterval.current!);
@@ -390,6 +408,36 @@ function GameBox({ gameMode }: { gameMode: string }) {
     />
   );
 })}
+            {<span style={{
+              textAlign: 'center',
+              marginTop: '10px',
+              fontSize: '24px',
+              color: 'black',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontFamily: 'Segoe UI, Arial, sans-serif',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+            }}>P1: {scoreSnake1}</span>}
+{gameMode === "Local Multiplayer" && <span style={{
+              textAlign: 'center',
+              marginTop: '10px',
+              fontSize: '24px',
+              color: 'black',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontFamily: 'Segoe UI, Arial, sans-serif',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+            }}>     </span>}
+{gameMode === "Local Multiplayer" && <span style={{
+              textAlign: 'center',
+              marginTop: '10px',
+              fontSize: '24px',
+              color: 'black',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontFamily: 'Segoe UI, Arial, sans-serif',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+            }}>P1: {scoreSnake2}</span>}
         {/* Food */}
         {food.map((f, index) => (
           <div
