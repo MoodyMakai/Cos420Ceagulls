@@ -3,7 +3,7 @@ name: Validate Pusher
 on:
   push:
     branches:
-      - main
+      - '*'
 
 jobs:
   validate-user:
