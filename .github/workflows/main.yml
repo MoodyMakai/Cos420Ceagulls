@@ -1,6 +1,9 @@
 name: Validate Pusher
 
 on:
+  pull_request:
+      branches:
+        - '*'
   push:
     branches:
       - '*'
