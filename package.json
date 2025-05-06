@@ -12,7 +12,7 @@
     "test:browser": "vitest --workspace=vitest.workspace.ts"
   },
   "dependencies": {
-    "bootstrap": "^5.3.5",
+    "bootstrap": "^5.3.6",
     "bootstrap4": "^0.0.1-security",
     "happy-dom": "^17.4.4",
     "react": "^19.0.0",
