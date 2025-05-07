@@ -30,3 +30,8 @@ export function loadSkins(): Skin[] {
     return skinList.map((skin: string) => SkinCreate(skin));
 }
 
+export function loadSkins2(): Skin[] {
+    const skinList = ["default", "square", "blurple"];
+    return skinList.map((skin: string) => SkinCreatePlayer2(skin));
+}
+
