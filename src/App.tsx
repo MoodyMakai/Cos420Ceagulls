@@ -6,19 +6,20 @@ import '../src/assets/super_snake_logo.png'
 import '../src/assets/super_snake_skins.png'
 import { useState, useEffect, useRef } from 'react';
 import {Skin} from './interfaces/skins';
-import {loadSkins} from './components/skin';
+import {loadSkins, loadSkins2} from './components/skin';
 
 
 //Creates and loads the skins
 
 
 const skins = loadSkins(); // Creates a list of skins
+const skins2 = loadSkins2();
 let selectedSkin:Skin = skins[0]
-let selectedSkin2:Skin = skins[1]
+let selectedSkin2:Skin = skins2[0]
 
 function updateSkin(index: number){
   selectedSkin = skins[index];
-  selectedSkin2 = skins[(index +1) % 3]
+  selectedSkin2 = skins2[index]
 }
 
 
