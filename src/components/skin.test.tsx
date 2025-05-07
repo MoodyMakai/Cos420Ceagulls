@@ -24,4 +24,16 @@ describe("App Tests", () => {
         expect(skin.turn === "../default/turn.png");
     });
 
+    test("Different Sprites are created when using SkinCreate", () => {
+        const skin = SkinCreate("default");
+        const skin2 = SkinCreate("blurple");
+        expect(skin != skin2);
+    });
+
+    test("Different Sprites are created when using SkinCreate", () => {
+        const skin = SkinCreate("default");
+        const skin2 = SkinCreate("blurple");
+        expect(skin != skin2);
+    });    
+
 });
